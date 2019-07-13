@@ -1,0 +1,33 @@
+{
+  "name": "graphql-anonymous-plugin",
+  "version": "1.0.0",
+  "description": "An apollo-server plugin for declartive un-authroize queries and mutations, and by default authroize all",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc --watch",
+    "postinstall": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amirzahavi/graphql-anonymous-plugin.git"
+  },
+  "keywords": [
+    "apollo",
+    "apollo-server",
+    "graphql",
+    "authorization",
+    "authentication",
+    "anonymous"
+  ],
+  "author": "amir zahavi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amirzahavi/graphql-anonymous-plugin/issues"
+  },
+  "homepage": "https://github.com/amirzahavi/graphql-anonymous-plugin#readme",
+  "devDependencies": {
+    "typescript": "^3.5.3"
+  }
+}
