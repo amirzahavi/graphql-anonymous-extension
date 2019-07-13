@@ -1,1 +1,5 @@
-console.log('object');
+export * from './AnonymousDirective';
+export * from './AnonymousPlugin';
+
+
+
