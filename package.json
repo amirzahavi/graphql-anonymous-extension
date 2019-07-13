@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "tsc --watch",
     "postinstall": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,11 @@
   },
   "homepage": "https://github.com/amirzahavi/graphql-anonymous-plugin#readme",
   "devDependencies": {
+    "jest": "^24.8.0",
     "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "graphql": "^14.4.2",
+    "graphql-tools": "^4.0.5"
   }
 }
