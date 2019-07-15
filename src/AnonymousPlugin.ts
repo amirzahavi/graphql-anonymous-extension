@@ -6,7 +6,7 @@ export type AnonymousContext = Record<string, any>;
 export default class AnonymousPlugin implements ApolloServerPlugin, GraphQLRequestListener {
     constructor(private schema: GraphQLSchema, private authFunc: (ctx: AnonymousContext) => void) {}
 
-    requestDidStart<Context>(requestContext: GraphQLRequestContext<Context>) {
+    requestDidStart<Context>(requestContext: GraphQLRequestContext<Context>): GraphQLRequestListener | void {
         if (requestContext.request.operationName === 'IntrospectionQuery') // skip interospection queries
             return null;
         return this;

@@ -29,9 +29,11 @@
   "homepage": "https://github.com/amirzahavi/graphql-anonymous-plugin#readme",
   "devDependencies": {
     "@types/graphql": "^14.2.2",
+    "@types/jest": "^24.0.15",
     "apollo-server-core": "^2.6.9",
     "apollo-server-plugin-base": "^0.5.8",
     "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
   },
   "dependencies": {
