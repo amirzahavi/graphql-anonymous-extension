@@ -1,11 +1,10 @@
 import {ApolloServer, AuthenticationError, makeExecutableSchema} from 'apollo-server';
 import {Context} from 'apollo-server-core';
 import AnonymousDirective from '../src/AnonymousDirective';
-import AnonymousPlugin from '../src/AnonymousPlugin';
+import AnonymousExtension from '../src/AnonymousExtension';
 
 import ApolloClient, {gql} from 'apollo-boost';
 import fetch from 'unfetch';
-import { GraphQLError } from 'graphql';
 
 type TestContext = {
     authorization: string
@@ -18,8 +17,8 @@ beforeAll(async () => {
         ${AnonymousDirective.DECLARATION}
 
         type Query {
-            public: String!
-            private: String! @anonymous
+            public: String! @anonymous
+            private: String! 
         }
     `;
 
@@ -42,13 +41,70 @@ beforeAll(async () => {
     server = new ApolloServer({
         schema,
         context: ({req}) => ({authorization: req.headers.authorization}),
-        plugins: [new AnonymousPlugin(schema, authenticate)]
+        extensions: [() => new AnonymousExtension(authenticate)]
     });
 
     await server.listen();
 });
 
-test('query without authorization header on public query should throw authentication error', async () => {
+test('query without authorization header on private query should throw authentication error', async () => {
+    const client = new ApolloClient({        
+        fetch,
+        uri: 'http://localhost:4000'
+    });
+
+    const query = gql`
+        {
+            private
+        }
+    `;
+
+    await expect(client.query({query}))
+            .rejects
+            .toThrow();
+});
+
+test('query with invalid authorization header on private query should throw authentication error', async () => {
+    const client = new ApolloClient({        
+        fetch,
+        headers: {
+            authorization: "invalid"
+        },
+        uri: 'http://localhost:4000'
+    });
+
+    const query = gql`
+        {
+            private
+        }
+    `;
+
+    await expect(client.query({query}))
+            .rejects
+            .toThrow();
+});
+
+test('query with valid authorization header on private query should return data', async () => {
+    const client = new ApolloClient({        
+        fetch,
+        headers: {
+            authorization: "secret"
+        },
+        uri: 'http://localhost:4000'
+    });
+
+    const query = gql`
+        {
+            private
+        }
+    `;
+
+    await expect(client.query({query}))
+        .resolves
+        .toHaveProperty('data.private', 'private');
+});
+
+test('query without authorization header on public query should return data', async () => {
     const client = new ApolloClient({        
         fetch,
         uri: 'http://localhost:4000'
@@ -61,5 +117,24 @@ test('query without authorization header on public query should throw authentica
     `;
 
     await expect(client.query({query}))
-            .rejects.toThrow();
+        .resolves
+        .toHaveProperty('data.public', 'public');
+});
+
+test('mix query without authorization header on public+private queries should throw error', async () => {
+    const client = new ApolloClient({        
+        fetch,
+        uri: 'http://localhost:4000'
+    });
+
+    const query = gql`
+        {
+            public
+            private
+        }
+    `;
+
+    await expect(client.query({query}))
+        .rejects
+        .toThrow();
 });

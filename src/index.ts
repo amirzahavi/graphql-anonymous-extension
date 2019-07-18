@@ -1,5 +1,5 @@
 export * from './AnonymousDirective';
-export * from './AnonymousPlugin';
+export * from './AnonymousExtension';
 
 
 
