@@ -1,7 +1,6 @@
 import {makeExecutableSchema} from 'graphql-tools';;
 import AnonymousPlugin from "../src/AnonymousPlugin";
 import AnonymousDirective from '../src/AnonymousDirective';
-import { FieldNode } from 'graphql/language';
 
 type TestContext = {
     value: string

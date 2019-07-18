@@ -30,13 +30,16 @@
   "devDependencies": {
     "@types/graphql": "^14.2.2",
     "@types/jest": "^24.0.15",
+    "apollo-server": "^2.7.0",
     "apollo-server-core": "^2.6.9",
     "apollo-server-plugin-base": "^0.5.8",
     "jest": "^24.8.0",
     "ts-jest": "^24.0.2",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "unfetch": "^4.1.0"
   },
   "dependencies": {
+    "apollo-boost": "^0.4.3",
     "graphql": "^14.4.2",
     "graphql-tools": "^4.0.5"
   }
