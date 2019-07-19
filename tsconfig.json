@@ -1,4 +1,4 @@
-{
+{    
     "compilerOptions": {
         "module": "commonjs",
         "esModuleInterop": true,
@@ -7,6 +7,7 @@
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": true,
+        "declaration": true,
         "outDir": "dist",
         "baseUrl": ".",
         "paths": {

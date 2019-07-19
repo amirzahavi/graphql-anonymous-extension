@@ -1,12 +1,13 @@
 {
-  "name": "graphql-anonymous-plugin",
+  "name": "graphql-anonymous-extension",
   "version": "0.0.2",
   "description": "An apollo-server plugin for declartive un-authroize queries and mutations, and by default authroize all",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "start": "tsc --watch",
-    "postinstall": "npm run build",
+    "prepublish": "npm run build",
     "test": "jest"
   },
   "repository": {
