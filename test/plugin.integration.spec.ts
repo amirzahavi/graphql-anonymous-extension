@@ -1,13 +1,14 @@
 import {ApolloServer, AuthenticationError, makeExecutableSchema} from 'apollo-server';
 import {Context} from 'apollo-server-core';
-import AnonymousDirective from '../src/AnonymousDirective';
-import AnonymousExtension from '../src/AnonymousExtension';
+import {AnonymousDirective} from '../src/AnonymousDirective';
+import {AnonymousExtension} from '../src/AnonymousExtension';
 
 import ApolloClient, {gql} from 'apollo-boost';
 import fetch from 'unfetch';
 
 type TestContext = {
-    authorization: string
+    authorization: string,
+    user: {id: number, name: string}
 }
 
 let server: ApolloServer = null;
@@ -35,13 +36,19 @@ beforeAll(async () => {
         
         if (ctx.authorization && ctx.authorization !== 'secret')
             throw new AuthenticationError('invalid');
+        
+        ctx.user = {id: 1, name: 'test_user'};
+    }
+
+    function isAuth({user}: Context<TestContext>) {
+        return typeof user !== 'undefined';
     }
 
     const schema = makeExecutableSchema({typeDefs, resolvers, schemaDirectives: {anonymous: AnonymousDirective}});
     server = new ApolloServer({
         schema,
         context: ({req}) => ({authorization: req.headers.authorization}),
-        extensions: [() => new AnonymousExtension(authenticate)]
+        extensions: [() => new AnonymousExtension(authenticate, isAuth)]
     });
 
     await server.listen();
