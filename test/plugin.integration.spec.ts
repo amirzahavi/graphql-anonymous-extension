@@ -21,12 +21,21 @@ beforeAll(async () => {
             public: String! @anonymous
             private: String! 
         }
+
+        type Mutation {
+            publicMut(arg: Int!): String! @anonymous
+            privateMut(arg: Int!): String! 
+        }
     `;
 
     const resolvers = {
         Query: {
-            public: () => 'public',
-            private: () => 'private'
+            public: () => 'query public',
+            private: () => 'query private'
+        },
+        Mutation: {
+            publicMut: (parent: any, {num}: {num: number}) => `mutation public ${num}`,
+            privateMut: (parent: any, {num}: {num: number}) => `mutation private ${num}`
         }
     };    
 
@@ -108,7 +117,7 @@ test('query with valid authorization header on private query should return data'
 
     await expect(client.query({query}))
         .resolves
-        .toHaveProperty('data.private', 'private');
+        .toHaveProperty('data.private', 'query private');
 });
 
 test('query without authorization header on public query should return data', async () => {
@@ -125,7 +134,7 @@ test('query without authorization header on public query should return data', as
 
     await expect(client.query({query}))
         .resolves
-        .toHaveProperty('data.public', 'public');
+        .toHaveProperty('data.public', 'query public');
 });
 
 test('mix query without authorization header on public+private queries should throw error', async () => {

@@ -17,9 +17,18 @@ export class AnonymousExtension<AnonymousContext> implements GraphQLExtension {
         context: AnonymousContext,
         info: GraphQLResolveInfo
     ) {
-        const schemaFields = info.schema.getQueryType().astNode.fields; 
-        const anonymousQueries = schemaFields.filter(f => f.directives.some(d => d.name.value === AnonymousDirective.NAME)).map(f => f.name.value);
-        const isAnonymousQuery = anonymousQueries.includes(info.fieldName);
+        // get query fields
+        const queryType = info.schema.getQueryType();        
+        const schemaFields = queryType && queryType.astNode ? queryType.astNode.fields : [];
+        // get mutation fields
+        const mutationType = info.schema.getMutationType();
+        const mutationFields = mutationType && mutationType.astNode ? mutationType.astNode.fields : [];
+        // merge all fields
+        const allFields = [...schemaFields, ...mutationFields];
+        // filter fields marked as anonymous
+        const anonymousFields = allFields.filter(f => f.directives.some(d => d.name.value === AnonymousDirective.NAME)).map(f => f.name.value);
+        // call authFunc if one or more fields are NOT marked as anonymous
+        const isAnonymousQuery = anonymousFields.includes(info.fieldName);
         if (!isAnonymousQuery && !this.isAuth(context)) {
             this.authFunc(context);        
         }
