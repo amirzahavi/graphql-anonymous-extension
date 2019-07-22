@@ -13,7 +13,9 @@ By default all queries and mutation are authenticated/authorize by calling the `
 
 `authFunc` will be called if one or more queries or mutations **DO NOT** have `@anonymous` directive mark on them
 
-NOTE - `isAuth` function called before `authFunc` will called to avoid re-authenticate/authorize in the same request for different fields
+NOTES: 
+1. `isAuth` function called before `authFunc` will called to avoid re-authenticate/authorize in the same request for different fields
+2. `authFunc` works only with synchronious function
 
 ### Example
 

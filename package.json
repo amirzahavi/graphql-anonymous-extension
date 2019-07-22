@@ -1,6 +1,6 @@
 {
   "name": "graphql-anonymous-extension",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An apollo-server plugin for declartive un-authroize queries and mutations, and by default authroize all",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
